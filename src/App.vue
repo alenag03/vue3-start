@@ -1,18 +1,15 @@
 <template>
   <div id="app">
-    <connection></connection>
-    <div class="info" v-for="info in getInfo" :key="info.title">
-      <h2>{{ info.title }}</h2>
-      <p>{{ info.variants[0].title }}</p>
-    </div>
+    <service></service>
+    
   </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import connection from './components/connection.vue'
+import Service from './components/service.vue'
 export default {
-  components: { connection },
+  components: { Service },
   name: 'App',
   computed: mapGetters(["getInfo"]),
   methods: mapActions(["fetchInfo"]),
