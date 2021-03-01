@@ -21,17 +21,17 @@
                             </select>
                     </div>
               </div>
-              <button class="button">Выбрать</button>
+              <button class="button" @click="show = !show">{{ btnText }} </button>
           </div>
       </div>
   </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
 export default {
     computed: mapGetters(["getInfo"]),
-    methods: mapActions(["fetchInfo"])
+    methods: mapActions(["fetchInfo"]), mapMutations(["btnText"])
 }
 </script>
 
@@ -91,11 +91,14 @@ export default {
     margin-bottom: 10px;
 }
 
-
 .features__label {
     text-align: center;
     margin-left: 15%;
     font-size: 14px;
+}
+
+#features__title:checked ~ .features__label {
+    opacity: 0.7;
 }
 
 .button {

@@ -10,7 +10,15 @@ export default {
     mutations: {
         updateInfo (state, info) {
             state.info = info
+        },
+        btnText () {
+            if (this.show) {
+                return 'Выбрать'
+            }
+
+            return 'Выбрано'
         }
+        
     },
     state: {
         info: []
