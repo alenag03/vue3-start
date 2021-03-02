@@ -1,6 +1,7 @@
 <template>
   <div v-for="option in getInfo" :key="option">
       <div class="option" v-for="variant in option.variants" :key="variant">
+          <h1>qwqwewqeq</h1>
           <div class="wrapper__description">
           <h3 class="title">{{ variant.title }}</h3>
           <div class="description">{{ variant.description }}</div>
@@ -21,7 +22,7 @@
                             </select>
                     </div>
               </div>
-              <button class="button" @click="show = !show">{{ btnText }} </button>
+              <button class="button">Выбрать</button>
           </div>
       </div>
   </div>
@@ -31,7 +32,10 @@
 import {mapGetters, mapActions, mapMutations} from 'vuex'
 export default {
     computed: mapGetters(["getInfo"]),
-    methods: mapActions(["fetchInfo"]), mapMutations(["btnText"])
+    methods: {
+        ...mapActions(["fetchInfo"]),
+        ...mapMutations(["toggleActive"])
+    }  
 }
 </script>
 

@@ -1,9 +1,13 @@
 export default {
+    state: {
+        info: [],
+        activeIndex: 0,
+    },
     actions: {
         async fetchInfo (ctx) {
             const res = await fetch('http://localhost:3000/data')
             const info = await res.json()
-            
+
             ctx.commit('updateInfo', info)
         }
     },
@@ -11,21 +15,17 @@ export default {
         updateInfo (state, info) {
             state.info = info
         },
-        btnText () {
-            if (this.show) {
-                return 'Выбрать'
-            }
-
-            return 'Выбрано'
+        setActiveIndex (state, activeIndex) {
+            state.activeIndex = activeIndex
         }
         
-    },
-    state: {
-        info: []
     },
     getters: {
         getInfo(state) {
             return state.info
-        }
+        },
+        getActiveIndex (state) {
+            return state.activeIndex;
+        },
     }
 }
