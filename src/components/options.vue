@@ -1,47 +1,81 @@
 <template>
-  <div v-for="option in getInfo" :key="option">
-      <div class="option" v-for="variant in option.variants" :key="variant">
-          <h1>qwqwewqeq</h1>
-          <div class="wrapper__description">
-          <h3 class="title">{{ variant.title }}</h3>
-          <div class="description">{{ variant.description }}</div>
-          </div>
-          <div class="wrapper wrapper__options">
-          <p class="default-price">{{ variant.price_default + '₽'}}</p>
-              <div class="wrapper" v-if="variant.options">
-                <form class="features" v-for="item in variant.options" :key="item">
-                    <input type="checkbox" id="features__title">
-                    <label class="features__label" for="features__title">{{ item.title }}</label>
-                </form>
-              </div>
-                <div class="wrapper__select" v-if="variant.select">
-                    <div v-for="option in variant.select" :key="option">
-                        <p class="select__description">{{ option.title }}</p>
+<section class="service">
+    <h4 class="title" @click="setActiveIndex(index)" v-if="serviceItem.title==='Подключение'">Тип подключения:</h4>
+    <h4 class="title" @click="setActiveIndex(index)" v-else>{{ serviceItem.title }}</h4>
+    <div v-if="index === getActiveIndex">
+        <div v-for="variant in serviceItem.variants" :key="variant">
+            <div class="option">
+                <div class="wrapper__description">
+                    <h3 class="option__title">{{ variant.title }}</h3>
+                    <p class="description">{{ variant.description }}</p>
+                </div>
+                <div class="wrapper">
+                        <p class="default-price">{{ variant.price_default + ' ₽'}}</p>                    
+                    <div class="wrapper__options" v-if="variant.options.length > 0">
+                        <form class="features" v-for="item in variant.options" :key="item">
+                            <input type="checkbox" id="features__title">
+                            <label class="features__label" for="features__title">{{ item.title }}</label>
+                        </form>
+                    </div>
+                    <div class="wrapper__select" v-else-if="variant.select.length > 0">
+                        <div v-for="option in variant.select" :key="option">
+                            <p class="select__description">{{ option.title }}</p>
                             <select required class="select">
                                 <option v-for="item in option.items" :key="item">{{ item.title }}</option>
                             </select>
+                        </div>
                     </div>
-              </div>
-              <button class="button">Выбрать</button>
-          </div>
-      </div>
-  </div>
-</template>
+                    <button class="button" @click="fillSelectedItems(variant)">Выбрать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</template>2
 
 <script>
 import {mapGetters, mapActions, mapMutations} from 'vuex'
 export default {
-    computed: mapGetters(["getInfo"]),
+    data () {
+        return {
+            title: '',
+            price_default: Number,
+            options: {
+                title: '',
+                price: Number
+            }
+            
+        }
+    },
+    props: {
+        serviceItem: {
+            type: Object,
+            required: true
+        },
+        index: {
+            type: Number,
+            required: true
+        },
+    },
+    computed: mapGetters(["getInfo", "getActiveIndex"]),
     methods: {
         ...mapActions(["fetchInfo"]),
-        ...mapMutations(["toggleActive"])
+        ...mapMutations(["setActiveIndex"]),
+        
     }  
 }
 </script>
 
 <style scoped>
 
+.service {
+    border-top: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    margin: 20px 10px;
+}
+
 .option {
+    position: relative;
     margin: 0 auto;
     padding: 30px 20px;
     margin-bottom: 10px;
@@ -52,26 +86,65 @@ export default {
     justify-content: space-between;
 }
 
+.option::before {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 8px;
+    background-color: #2fcb5a;
+    border-radius: 5px;
+}
+
+.option::after {
+    position: absolute;
+    content: "";
+    left: 5px;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: #2fcb5a;
+}
+
+.option__title {
+    text-align: left;
+}
+
 .title {
-    margin-top: 0;
+    margin-top: 10;
+    cursor: pointer;
+    text-align: left;
 }
 
 .default-price {
     text-align: right;
-    margin-right: 40%;
 }
 
 .description {
     text-align: left;
-    width: 70%;
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
+    white-space: pre-wrap;
+    line-height: 20px;
 }
 
 .wrapper {
-    width: 30%;
+    position: relative;
+    width: 20%;
     display: flex;
     flex-flow: column;
+    align-items: flex-end;
+}
+
+.wrapper::before {
+    position: absolute;
+    content: "";
+    left: -55%;
+    top: 0;
+    border-left: 1px solid #ccc;
+    height: 100%;
+    opacity: 0.7;
 }
 
 .wrapper__description {
@@ -88,17 +161,19 @@ export default {
     display: flex;
     flex-direction: row;
     /* justify-content: space-between; */
-    width: 210px;
+    width: 198px;
     padding: 10px 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
+    outline: none;
 }
 
 .features__label {
     text-align: center;
     margin-left: 15%;
     font-size: 14px;
+    padding: 0;
 }
 
 #features__title:checked ~ .features__label {
@@ -106,7 +181,7 @@ export default {
 }
 
 .button {
-    width: 220px;
+    width: 210px;
     padding: 0%;
     padding: 10px 73px;
     font-size: 14px;
@@ -114,6 +189,11 @@ export default {
     border: 1px solid #f0f0f0;
     border-radius: 5px;
     color: #ffffff;
+    outline: none;
+}
+
+.button__active-state {
+    background-color: #2fcb5a;
 }
 
 .button:hover,
@@ -126,7 +206,7 @@ export default {
 }
 
 .select {
-    width: 220px;
+    width: 210px;
     margin-bottom: 10px;
     padding: 10px 10px;
     font-size: 14px;

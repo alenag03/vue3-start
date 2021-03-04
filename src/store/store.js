@@ -2,6 +2,7 @@ export default {
     state: {
         info: [],
         activeIndex: 0,
+        selectedItems: []
     },
     actions: {
         async fetchInfo (ctx) {
@@ -15,9 +16,14 @@ export default {
         updateInfo (state, info) {
             state.info = info
         },
-        setActiveIndex (state, activeIndex) {
-            state.activeIndex = activeIndex
+        setActiveIndex (state, newIndex) {
+            state.activeIndex = newIndex
+        },
+        fillSelectedItems (state, data) {
+            state.selectedItems.push(data)
         }
+        
+        
         
     },
     getters: {
@@ -27,5 +33,9 @@ export default {
         getActiveIndex (state) {
             return state.activeIndex;
         },
+        getSelectedItems (state) {
+            return state.selectedItems
+        }
+      
     }
 }
