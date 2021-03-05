@@ -10,6 +10,7 @@ const store = createStore({
     }
 })
 
+
 app.use(store)
 
 app.mount('#app')

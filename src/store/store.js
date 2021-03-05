@@ -2,7 +2,10 @@ export default {
     state: {
         info: [],
         activeIndex: 0,
-        selectedItems: []
+        selectedItems: [],
+        selectedItemsMap: new Map(),
+       
+        
     },
     actions: {
         async fetchInfo (ctx) {
@@ -19,9 +22,10 @@ export default {
         setActiveIndex (state, newIndex) {
             state.activeIndex = newIndex
         },
-        fillSelectedItems (state, data) {
-            state.selectedItems.push(data)
-        }
+        // fillSelectedItems (state, data) {
+        //     state.selectedItems.push(data)
+        // },
+        
         
         
         

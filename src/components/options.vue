@@ -17,15 +17,8 @@
                             <label class="features__label" for="features__title">{{ item.title }}</label>
                         </form>
                     </div>
-                    <div class="wrapper__select" v-else-if="variant.select.length > 0">
-                        <div v-for="option in variant.select" :key="option">
-                            <p class="select__description">{{ option.title }}</p>
-                            <select required class="select">
-                                <option v-for="item in option.items" :key="item">{{ item.title }}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="button" @click="fillSelectedItems(variant)">Выбрать</button>
+                    <selectOptions :variant="variant"></selectOptions>
+                    <button class="button" @click="setOption">Выбрать</button>
                 </div>
             </div>
         </div>
@@ -35,18 +28,9 @@
 
 <script>
 import {mapGetters, mapActions, mapMutations} from 'vuex'
+import selectOptions from './selectOptions'
 export default {
-    data () {
-        return {
-            title: '',
-            price_default: Number,
-            options: {
-                title: '',
-                price: Number
-            }
-            
-        }
-    },
+  components: { selectOptions },
     props: {
         serviceItem: {
             type: Object,
@@ -60,7 +44,14 @@ export default {
     computed: mapGetters(["getInfo", "getActiveIndex"]),
     methods: {
         ...mapActions(["fetchInfo"]),
-        ...mapMutations(["setActiveIndex"]),
+        ...mapMutations(["setActiveIndex", "setSelectedItem"]),
+        setOption() {
+            this.setSelectedItem({
+                title: this.$props.serviceItem.title,
+                defaultPrice: this.$props.serviceItem.price_default,
+                option: this.$props.serviceItem.price_default,
+            })
+        },
         
     }  
 }
@@ -151,12 +142,6 @@ export default {
     width: 70%;
 }
 
-.select__description {
-    font-size: 12px;
-    width: 100%;
-    text-align: left;
-}
-
 .features {
     display: flex;
     flex-direction: row;
@@ -199,19 +184,6 @@ export default {
 .button:hover,
 .button:active {
     background-color: #2fcb5a;
-}
-
-.wrapper__select {
-    width: 210px;
-}
-
-.select {
-    width: 210px;
-    margin-bottom: 10px;
-    padding: 10px 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
 }
 
 </style>>
