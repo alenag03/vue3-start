@@ -3,7 +3,7 @@
                         <div v-for="option in variant.select" :key="option">
                             <p class="select__description">{{ option.title }}</p>
                             <select required class="select" @change="countPrice" v-model="selected">
-                                <option disabled value="">Выберите</option>
+                                 <option selected >Выберите</option>
                                 <option v-for="item in option.items" :key="item" v-bind:value="item">{{ item.title }}</option>
                             </select>
                             <span v-if="selected!=null">Selected: {{ selected.title }} - {{ selected.price }}</span>
@@ -16,7 +16,7 @@ import {mapGetters, mapActions, mapMutations} from 'vuex'
 export default {
     data () {
         return {
-            selected: null
+            selected: undefined
         }
     },
     props: { 
@@ -30,7 +30,7 @@ export default {
         ...mapActions(["fetchInfo"]),
         ...mapMutations(["setActiveIndex", "setSelectedItem"]),
         countPrice() {
-            console.log(this.$data.selected.price);
+            console.log(this.$data.selected);
         }
     }
 
