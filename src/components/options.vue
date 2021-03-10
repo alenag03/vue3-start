@@ -12,10 +12,11 @@
                 <div class="wrapper">
                         <p class="default-price">{{ variant.price_default + ' ₽'}}</p>                    
                     <div class="wrapper__options" v-if="variant.options.length > 0">
-                        <form class="features" v-for="item in variant.options" :key="item">
-                            <input type="checkbox" id="features__title">
+                        <form id="v-model-multiple-checkboxes" class="features" v-for="item in variant.options" :key="item">
+                            <input type="checkbox" id="features__title" value="`" v-model="checked">
                             <label class="features__label" for="features__title">{{ item.title }}</label>
                         </form>
+                        <span>Checked: {{ checked }}</span>
                     </div>
                     <selectOptions :variant="variant"></selectOptions>
                     <button class="button" @click="setOption">Выбрать</button>
@@ -30,7 +31,12 @@
 import {mapGetters, mapActions, mapMutations} from 'vuex'
 import selectOptions from './selectOptions'
 export default {
-  components: { selectOptions },
+    data () {
+        return {
+            checked: []
+        }
+    },
+    components: { selectOptions },
     props: {
         serviceItem: {
             type: Object,

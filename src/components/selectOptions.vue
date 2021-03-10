@@ -3,7 +3,6 @@
                         <div v-for="option in variant.select" :key="option">
                             <p class="select__description">{{ option.title }}</p>
                             <select required class="select" @change="countPrice" v-model="selected">
-                                 <option selected >Выберите</option>
                                 <option v-for="item in option.items" :key="item" v-bind:value="item">{{ item.title }}</option>
                             </select>
                             <span v-if="selected!=null">Selected: {{ selected.title }} - {{ selected.price }}</span>
