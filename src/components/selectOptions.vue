@@ -3,11 +3,11 @@
                         <div v-for="option in variant.select" :key="option">
                             <p class="select__description">{{ option.title }}</p>
                             <select required class="select" @change="countPrice" v-model="selected">
-                                <option v-for="item in option.items" :key="item" v-bind:value="item">{{ item.title }}</option>
+                                <option v-for="item in option.items" :key="item" v-bind:value="item.price">{{ item.title }}</option>
                             </select>
-                            <span v-if="selected!=null">Selected: {{ selected.title }} - {{ selected.price }}</span>
-                        </div>
+                            <span v-if="selected!=null">Selected: {{ selected }}</span>
                     </div>
+  </div>
 </template>
 
 <script>
@@ -15,7 +15,7 @@ import {mapGetters, mapActions, mapMutations} from 'vuex'
 export default {
     data () {
         return {
-            selected: undefined
+            selected: null
         }
     },
     props: { 

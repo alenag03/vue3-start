@@ -12,11 +12,11 @@
                 <div class="wrapper">
                         <p class="default-price">{{ variant.price_default + ' ₽'}}</p>                    
                     <div class="wrapper__options" v-if="variant.options.length > 0">
-                        <form id="v-model-multiple-checkboxes" class="features" v-for="item in variant.options" :key="item">
-                            <input type="checkbox" id="features__title" value="`" v-model="checked">
+                        <form class="features" v-for="item in variant.options" :key="item">
+                            <input type="checkbox" id="features__title" @change="countPrice(checkedOptions)" v-bind:value="item.price" v-model="checkedOptions">
                             <label class="features__label" for="features__title">{{ item.title }}</label>
                         </form>
-                        <span>Checked: {{ checked }}</span>
+                        <span>Checked: {{ checkedOptions }}</span>
                     </div>
                     <selectOptions :variant="variant"></selectOptions>
                     <button class="button" @click="setOption">Выбрать</button>
@@ -33,7 +33,7 @@ import selectOptions from './selectOptions'
 export default {
     data () {
         return {
-            checked: []
+            checkedOptions: [] 
         }
     },
     components: { selectOptions },
@@ -58,6 +58,15 @@ export default {
                 option: this.$props.serviceItem.price_default,
             })
         },
+        countPrice (array) {
+            if (array.length > 0) {
+                let total = array.reduce(function(a, b) {
+                    return a + b;
+                    })
+                    console.log(total);
+            }
+            
+        }
         
     }  
 }
