@@ -10,16 +10,15 @@
                     <p class="description">{{ variant.description }}</p>
                 </div>
                 <div class="wrapper">
-                        <p class="default-price">{{ variant.price_default + ' ₽'}}</p>                    
-                    <div class="wrapper__options" v-if="variant.options.length > 0">
+                        <p class="default-price">{{ variant.price_default + countPrice(variant.title) + ' ₽'}}</p>                    
+                    <div class="wrapper__options" v-if="variant.options.length">
                         <form class="features" v-for="item in variant.options" :key="item">
-                            <input type="checkbox" id="features__title" @change="countPrice(checkedOptions)" v-bind:value="item.price" v-model="checkedOptions">
+                            <input type="checkbox" id="features__title" :value="item.price" v-model="checked[variant.title]">
                             <label class="features__label" for="features__title">{{ item.title }}</label>
                         </form>
-                        <span>Checked: {{ checkedOptions }}</span>
                     </div>
-                    <selectOptions :variant="variant"></selectOptions>
-                    <button class="button" @click="setOption">Выбрать</button>
+                    <selectOptions v-if="variant.select.length" @select="(v) => setValue(variant.title, v)" :variant="variant"></selectOptions>
+                    <button class="button" @click="setOption(variant.title)">Выбрать</button>
                 </div>
             </div>
         </div>
@@ -33,7 +32,9 @@ import selectOptions from './selectOptions'
 export default {
     data () {
         return {
-            checkedOptions: [] 
+            checked: {}, 
+            selectedVariant: {},
+            selectedOptions: 
         }
     },
     components: { selectOptions },
@@ -47,27 +48,48 @@ export default {
             required: true
         },
     },
-    computed: mapGetters(["getInfo", "getActiveIndex"]),
+    emits: ['select'],
+    computed: mapGetters(["getInfo", "getActiveIndex", "getSelectedItems"]),
     methods: {
         ...mapActions(["fetchInfo"]),
-        ...mapMutations(["setActiveIndex", "setSelectedItem"]),
-        setOption() {
-            this.setSelectedItem({
-                title: this.$props.serviceItem.title,
-                defaultPrice: this.$props.serviceItem.price_default,
-                option: this.$props.serviceItem.price_default,
+        ...mapMutations(["setActiveIndex", "setSelectedItems"]),
+        setOption(title) {
+            const data = this.$data.selectedVariant[title]
+            
+            this.getSelectedItems.push(data)
+            console.log(this.getSelectedItems);
+            this.getSelectedItems.forEach((variant) => {
+                const priceDefault = variant.price_default
+                if (variant.options.length) {
+                    console.log(this.countPrice(variant.title));
+                }
+                if (variant.select.length) {
+                    console.log(this.setValue(variant.title));
+                }
+                console.log(priceDefault);
             })
         },
-        countPrice (array) {
-            if (array.length > 0) {
-                let total = array.reduce(function(a, b) {
-                    return a + b;
-                    })
-                    console.log(total);
-            }
-            
+        countPrice (title) {
+            const data = this.$data.checked[title]
+
+            if (!Array.isArray(data)) return data
+
+            if (!data.length) return 0
+
+            const total = data.reduce((r, item) => r + item)
+            return total           
+        },
+        setValue (title, value) {
+            this.$data.checked[title] = value
         }
         
+    },
+    beforeMount() {
+        this.$props.serviceItem.variants.forEach((v) => {
+            this.$data.checked[v.title] = v.options.length ? [] : 0
+
+            this.$data.selectedVariant[v.title] = v
+        })
     }  
 }
 </script>

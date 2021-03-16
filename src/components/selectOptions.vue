@@ -1,13 +1,12 @@
 <template>
-  <div class="wrapper__select" v-if="variant.select.length > 0">
-                        <div v-for="option in variant.select" :key="option">
-                            <p class="select__description">{{ option.title }}</p>
-                            <select required class="select" @change="countPrice" v-model="selected">
-                                <option v-for="item in option.items" :key="item" v-bind:value="item.price">{{ item.title }}</option>
-                            </select>
-                            <span v-if="selected!=null">Selected: {{ selected }}</span>
-                    </div>
-  </div>
+    <div class="wrapper__select">
+        <div v-for="option in variant.select" :key="option">
+            <p class="select__description">{{ option.title }}</p>
+            <select required class="select" @change="countPrice" v-model="selected">
+                <option v-for="item in option.items" :key="item" :value="item.price">{{ item.title }}</option>
+            </select>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -29,7 +28,7 @@ export default {
         ...mapActions(["fetchInfo"]),
         ...mapMutations(["setActiveIndex", "setSelectedItem"]),
         countPrice() {
-            console.log(this.$data.selected);
+            this.$emit('select', this.$data.selected)
         }
     }
 
