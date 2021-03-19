@@ -34,7 +34,7 @@ export default {
         return {
             checked: {}, 
             selectedVariant: {},
-            selectedOptions: 
+            selectedOptions: {}
         }
     },
     components: { selectOptions },
