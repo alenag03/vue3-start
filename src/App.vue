@@ -6,13 +6,16 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
 import Service from './components/service.vue'
 export default {
   components: { Service },
   name: 'App',
   computed: mapGetters(["getInfo"]),
-  methods: mapActions(["fetchInfo"]),
+  methods: {
+    ...mapActions(["fetchInfo"]),
+    ...mapMutations(["setActiveIndex"])
+    } ,
   async mounted() {
     this.fetchInfo()
   }
@@ -32,4 +35,6 @@ export default {
 .info {
   border: 1px solid gray;
 }
+
+
 </style>

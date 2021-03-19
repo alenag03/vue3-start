@@ -1,9 +1,13 @@
 <template>
-  <section class="service" v-for="(serviceItem, index) in getInfo" :key="index">
-    <h3 class="title" @click="setActiveIndex" v-if="serviceItem.title==='Подключение'">Тип подключения</h3>
-      <h3 class="title" @click="setActiveIndex" v-else>{{ serviceItem.title}}</h3>
-      <options v-if="index === getActiveIndex"></options>
+  <section v-for="(serviceItem, index) in getInfo" :key="serviceItem.title">
+    <options :serviceItem="serviceItem" :index="index"></options>
   </section>
+  <footer>
+      <div class="footer">
+        <p class="footer-final">Итого к оплате</p>
+        <p class="price_total">{{  ' ₽' }}</p>
+      </div>
+    </footer>
 </template>
 
 <script>
@@ -31,6 +35,30 @@ h3 {
 
 .toggleActive {
   display: none;
+}
+
+.footer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  background-color: #2fcb5a;
+  margin: 20px 10px;
+  border-radius: 5px;
+}
+
+.footer-final {
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 24px;
+  color: #fff;
+  margin: 16px 0;
+}
+
+.price_total {
+  padding-right: 20px;
+  font-size: 24px;
+  color: #fff;
+  margin: 16px 0;
 }
 
 </style>>
